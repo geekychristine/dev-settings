@@ -1,0 +1,23 @@
+One Dark                       
+
+Black:          #1E2127
+Bright Black:   #5C6370
+Red:            #E06C75
+Bright Red:     #E06C75
+Green:          #98C379
+Bright Green:   #98C379
+Yellow:         #D19A66
+Bright Yellow:  #D19A66
+Blue:           #61AFEF
+Light Blue:     #61AFEF
+Magenta:        #C678DD
+Light Magenta:  #C678DD
+Cyan:           #56B6C2
+Light Cyan:     #56B6C2
+White:          #ABB2BF
+Bright White:   #FFFFFF
+Text:           #ABB2BF
+Bold Text:      #ABB2BF
+Selection:      #3A3F4B
+Cursor:         #5C6370
+Background:     #1E2127
