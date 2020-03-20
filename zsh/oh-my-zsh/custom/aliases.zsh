@@ -66,3 +66,10 @@ alias gl='git log --oneline'
 alias tag='git tag'
 alias pull='git pull'
 alias push='git push origin'
+
+# Gets the reference list of branches that were merged into the current branch
+# Useful for finding stale branches for deletion
+function git-merged () {
+  for branch in `git branch -r --merged | grep -v HEAD`; 
+  do echo -e `git show --format="%ci %cr %an" $branch | head -n 1` \\t$branch; done | sort -r
+}
