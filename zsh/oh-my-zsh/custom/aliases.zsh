@@ -16,8 +16,11 @@ alias sshadd='ssh-add -K ~/.ssh/id_rsa'
 alias sshcopy='pbcopy < ~/.ssh/id_rsa.pub'
 
 # Common Task Shortcuts
+alias dc='docker-compose'
 alias dcu='docker-compose up'
 alias dcd='docker-compose down'
+alias dcb='docker-compose build'
+alias bomb='dcd && docker-compose build && dcu -d && btco && stco'
 alias snaps='npm test -- -u'
 alias build='npm run build'
 alias start='npm start'
@@ -28,15 +31,31 @@ alias install-sb='npm i --save-dev storybook-addon-jsx @storybook/addon-backgrou
 alias jekstart='bundle exec jekyll serve'
 alias btco='npm run build:tbiv3'
 alias stco='npm run start:tbiv3'
+alias bsr='npm run backstop:reference'
+alias bst='npm run backstop:test'
+#alias bsa='backstop approve --config="backstop-config.js"'
 
+function docker-ssh {
+    docker exec -it $1 /bin/bash
+}
+
+function bsa {
+  backstop approve --config="backstop-config.js" --filter="$1";
+}
 
 # Directory shortcuts
-alias sites='cd ~/Sites'
+alias asi='cd ~/dev/proj/asi/ngx-esp'
+alias asi-start='asi && ng run cosmos-components:storybook'
+alias asi-lint='asi && ng run cosmos-components:lint'
+alias asi-test='asi && ng run cosmos-components:test'
+alias asi-build='asi && ng build encore --configuration=uat'
 alias bsd='cd ~/dev/proj/bsd-account'
-alias oc='cd ~/dev/proj/onecloud-frontend'
 alias dops='cd ~/dev/proj/design-ops-and-systems'
-alias fen='cd ~/dev/proj/fennec-ui'
-alias think='cd ~/dev/think'
+alias oc='cd ~/dev/proj/onecloud-frontend'
+alias ppsa='cd ~/dev/proj/projector-ui-library'
+alias sites='cd ~/Sites'
+alias tco='cd ~/dev/think/think_www'
+alias think=tco
 alias uxd='cd ~/dev/think/uxd-summit-ui'
 alias sb='npm run storybook'
 
@@ -60,7 +79,7 @@ alias gbrn='git branch -m'
 alias gbdr='git push origin --delete'
 alias guser='git config user.email'
 alias gup='git push --set-upstream origin'
-alias gm='git merge'
+alias gms='git merge --squash'
 alias grb='git rebase'
 alias gl='git log --oneline'
 alias tag='git tag'
@@ -72,4 +91,17 @@ alias push='git push origin'
 function git-merged () {
   for branch in `git branch -r --merged | grep -v HEAD`; 
   do echo -e `git show --format="%ci %cr %an" $branch | head -n 1` \\t$branch; done | sort -r
+}
+
+function tco-start {
+  tco;
+  docker-compose up -d;
+  nvm use 8;
+  btco;
+  stco;
+}
+
+function tco-stop {
+  docker-compose stop;
+  nvm use default;
 }
