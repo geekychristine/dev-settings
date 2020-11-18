@@ -10,10 +10,31 @@
 #
 
 # SSH Key Commands
-alias sshgen='ssh-keygen -t rsa -b 4096 -C "christine.martino@thinkcompany.com"'
-alias sshid='eval "$(ssh-agent -s)"'
-alias sshadd='ssh-add -K ~/.ssh/id_rsa'
-alias sshcopy='pbcopy < ~/.ssh/id_rsa.pub'
+function genssh () {
+  local thinkEmail="christine.martino@thinkcompany.com"
+  local defaultFile="id_rsa"
+  local file="${1:-$defaultFile}"
+  local email="${2:-$thinkEmail}"
+
+  echo $email;
+  echo $file;
+
+  # Generate it
+  ssh-keygen -t rsa -b 4096 -C "$email" -f ~/.ssh/$file;
+  echo 'Key generated.';
+
+  # Check it
+  echo 'Agent pid:';
+  eval "$(ssh-agent -s)";
+
+  # Add it
+  ssh-add -K ~/.ssh/${file};
+  echo 'Key added to SSH Agent.'
+
+  # Copy key to clipboard
+  pbcopy < ~/.ssh/${file}.pub;
+  echo 'Key copied to clipboard.'
+}
 
 # Common Task Shortcuts
 alias dc='docker-compose'
@@ -53,6 +74,7 @@ alias bsd='cd ~/dev/proj/bsd-account'
 alias dops='cd ~/dev/proj/design-ops-and-systems'
 alias oc='cd ~/dev/proj/onecloud-frontend'
 alias ppsa='cd ~/dev/proj/projector-ui-library'
+alias eddi='cd ~/dev/proj/janssen_eddi-us'
 alias sites='cd ~/Sites'
 alias tco='cd ~/dev/think/think_www'
 alias think=tco
@@ -104,4 +126,31 @@ function tco-start {
 function tco-stop {
   docker-compose stop;
   nvm use default;
+}
+
+function zeta-up {
+  vagrant halt;
+  vagrant up;
+  vagrant ssh;
+  forever list;
+}
+
+function git-config {
+  local email='christine.martino@thinkcompany.com'
+  local name='Christine Martino'
+  local comcastEmail='christine_martino@comcast.com'
+  local comcastName='cmarti857'
+
+  # Checks if variable is a "zero-length" value
+  if [ "${1}" = "comcast" ]; then
+    git config --global user.email "$comcastEmail";
+    git config --global user.name "$comcastName";
+  else
+    git config --global user.email "$email";
+    git config --global user.name "$name";
+  fi
+
+  echo "Global git config changed to: "
+  git config --get user.name;  
+  git config --get user.email;
 }
